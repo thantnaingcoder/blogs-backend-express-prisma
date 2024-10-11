@@ -8,12 +8,12 @@ const jwt = require("jsonwebtoken");
 const upload = multer({ dest: "uploads/" });
 const prisma = new PrismaClient();
 const router = express.Router();
+const fs = require('fs');
 
 
 router.get("/blogs",auth, async (req, res) => {                  //..................get all blogs...............
     const authorization = req.headers.authorization;
     const token = authorization && authorization.split(" ")[1];
-    
      const authUser = jwt.verify(token, process.env.NEXTAUTH_SECRET);
     try {
               const blogs = await prisma.blog.findMany({
@@ -40,14 +40,19 @@ router.get("/blogs",auth, async (req, res) => {                  //.............
     const { file } = req;
     const { title, content, author } = req.body;
 
+    
+    if (!file) {
+      return res.status(400).json({ error: "Photo is required" });
+    }
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-   
-
     try {
+  
+
       const photo = await prisma.blog.create({
         data: {
           title,
