@@ -25,6 +25,11 @@ const isTokenExpired = (token) => {
 
 const auth = async (req, res, next) => {
   const authorization = req.headers.authorization;
+  if (!authorization) {
+    return res.status(401).json({ error: "empty token" });
+  } 
+
+  
   const token = authorization && authorization.split(" ")[1];
 
   const expired = isTokenExpired(token);
@@ -32,9 +37,6 @@ const auth = async (req, res, next) => {
     where: { token },
   });
 
-  if (!authorization) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
 
   if (expired || !!blacklisted) {
     return res.status(401).json({ error: "Token expired login again" });

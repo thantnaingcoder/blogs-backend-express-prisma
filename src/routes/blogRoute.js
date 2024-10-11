@@ -17,7 +17,10 @@ router.get("/blogs",auth, async (req, res) => {                  //.............
      const authUser = jwt.verify(token, process.env.NEXTAUTH_SECRET);
     try {
               const blogs = await prisma.blog.findMany({
-                where: { userId: authUser.userId },
+                // where: { userId: authUser.userId  },
+                orderBy : { createdAt : 'desc'},
+                include : {user : true},
+                
               });
               res.json(blogs);
             } catch (error) {

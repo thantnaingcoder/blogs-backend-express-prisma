@@ -129,4 +129,8 @@ router.post("/logout",auth, async (req, res) => {
  
 });
 
+router.get('/protect-route', auth,(req,res) => {
+    res.json("auth")
+} )
+
 module.exports = router;
