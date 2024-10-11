@@ -1,0 +1,18 @@
+const express = require("express");
+const app = express();
+app.use("/uploads", express.static("uploads"));
+require("dotenv").config();
+ const authRoute = require("./src/routes/authRoute");
+ const  blogRoute = require("./src/routes/blogRoute");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+
+
+
+app.use("/", blogRoute);         //blog route
+app.use("/", authRoute);          //auth route
+
+
+app.listen(3000, () => console.log("Server running on port 3000"));
